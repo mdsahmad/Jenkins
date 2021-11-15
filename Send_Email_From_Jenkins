@@ -1,0 +1,15 @@
+pipeline {
+	agent {label 'master'}
+
+	tools { 
+        maven 'Local MAVEN'  
+        jdk 'Local JDK'
+    }
+	stages {
+		stage('Trigger scripts') {
+			steps {
+            mail bcc: '', body: 'The Jenkins build job failed due to the code analysis failed', cc: '', from: 'Email_Address', replyTo: '', subject: 'Sonarqube code analysis report', to: 'Email_Address'
+			}
+			}		
+		}
+}
