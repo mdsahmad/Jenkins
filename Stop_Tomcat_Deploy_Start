@@ -1,0 +1,32 @@
+pipeline {
+	agent {label 'master'}
+
+	tools { 
+        jdk 'Local JDK'
+    }
+	stages {
+		stage('Stop Toamcat Service') {
+			steps {
+			    bat ''':stop
+                        sc stop Tomcat_Service_Name
+                        ping 127.0.0.1 -n 10 >nul
+                        sc query Tomcat_Service_Name | find /I "STATE" | find "STOPPED"
+                        if errorlevel 1 goto :stop'''
+			}
+			}
+	    
+		stage('Deploy Application') {
+			steps {
+			    bat 'copy "Source_Folder_Path\\Application_Name.war" "Destination_Folder_Path\\Application_Name.war"'
+			    bat 'PING 127.0.0.1 -n 30 >NUL'
+                }
+			}
+			
+		stage('Start Toamcat Service') {
+			steps {
+                bat 'sc start Tomcat_Service_Name'
+			}
+			}
+		}
+		
+}
