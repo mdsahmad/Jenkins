@@ -1,0 +1,32 @@
+pipeline {
+	agent {label 'master'}
+
+	tools { 
+        maven 'Local MAVEN'  
+        jdk 'Local JDK'
+    }
+    stages{
+		stage('Folder Creation and Permissions') {
+			steps {
+    		bat '''if not exist "Folder_Path\\Folder_Name" (
+    			mkdir "Folder_Path\\Folder_Name" 2>nul
+    			mkdir "Folder_Path\\Folder_Name" 2>nul
+    			mkdir "Folder_Path\\Folder_Name" 2>nul
+    			mkdir "Folder_Path\\Folder_Name" 2>nul
+    			mkdir "Folder_Path\\Folder_Name"	2>nul
+    			if not errorlevel 1 (
+    				icacls Folder_Path /t /grant Everyone:F
+    				echo granted access
+    				Net Share fodercreatetest=Folder_Path /grant:everyone,FULL
+    			)
+    		)'''			    
+			}
+			}
+		stage('Mapping & Configuration Files') {
+			steps {
+                bat 'xcopy Source_File_Path Destination_Path /E /H /C /I /Y'
+                bat 'xcopy Source_File_Path Destination_Path /E /H /C /I /Y'			    
+			}
+			}
+    }
+}
