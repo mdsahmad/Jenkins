@@ -1,0 +1,45 @@
+pipeline {
+	agent {label 'master'}
+
+	tools { 
+        maven 'Local MAVEN'  
+        jdk 'Local JDK'
+    }
+	stages {				
+
+			
+		stage('MQ Repository clone') {
+			steps {
+			script {
+            if(MQBranch.equals("Other")) {
+				git branch: "${params.OtherMQBranch}", url: 'ssh_git_branch'
+            }
+            else{			
+                git branch: "${params.MQBranch}", url: 'ssh_git_branch'
+			}
+			}
+			}
+	    	}
+
+		stage('Test') {
+			steps {
+            bat 'robot TestCaseFileName.robot'
+
+			}
+        post {
+            success {
+               mail bcc: '', body: '''Job Success,
+
+				SonarQubeURL''', cc: '', from: 'Email_Address', replyTo: '', subject: 'job success', to: 'Email_Address'
+            }
+            failure {
+                mail bcc: '', body: '''Job failed!,
+
+				SonarQubeURL''', cc: '', from: 'Email_Address', replyTo: '', subject: 'job failed', to: 'Email_Address'
+        }
+           
+       }
+			}	
+	}
+
+}
