@@ -1,0 +1,34 @@
+pipeline {
+	agent {label 'master'}
+
+	tools { 
+        maven 'Local MAVEN'  
+        jdk 'Local JDK'
+    }
+	stages {				
+
+			
+		stage('Repository clone') {
+			steps {
+                 git branch: 'Branch_Name', url: 'ssh_gitURL'
+			}
+			}
+        stage ('Download Dependency') {
+            steps {
+            bat 'curl -u JFrogUser:JFrogPassword -XGET RepositoryURL/File_Name --output Folder_Path\\File_Name'            
+            }
+        }			
+		stage('Build RestService jar'){
+			steps{
+			    bat 'mvn install:install-file -Dfile=Folder_Path\\File_Name -DgroupId=ID -DartifactId=DirectoryName -Dversion=1.0 -Dpackaging=jar'
+                bat 'mvn install:install-file -Dfile=Folder_Path\\File_Name -DgroupId=ID -DartifactId=DirectoryName -Dversion=1.0 -Dpackaging=jar'
+                bat 'mvn install:install-file -Dfile=Folder_Path\\File_Name -DgroupId=ID -DartifactId=DirectoryName -Dversion=1.0 -Dpackaging=jar'
+                bat 'mvn clean install'
+			
+			}
+		
+		}
+		
+		}
+		
+}
